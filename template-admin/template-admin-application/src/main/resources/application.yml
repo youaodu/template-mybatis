@@ -1,0 +1,19 @@
+# A.CTable
+mybatis:
+  table:
+    auto: update
+  model:
+    pack: com.youaodu.template.common.entity.model
+  database:
+    type: mysql
+spring:
+  profiles:
+    active: ${profile:dev}
+mybatis-plus:
+  mapper-locations: classpath*:mapper/*.xml,classpath*:com/gitee/sunchenbin/mybatis/actable/mapping/*/*.xml
+  global-config:
+    db-config:
+      logic-not-delete-value: 0
+      logic-delete-value: 1
+  type-aliases-package: com.youaodu.template.common.entity.model
+  type-aliases-super-type: com.youaodu.template.common.framework.crud.BaseEntity
