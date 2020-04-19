@@ -1,29 +1,29 @@
 package com.youaodu.template.common.framework.crud;
 
-import com.baomidou.mybatisplus.annotation.IdType;
+
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableLogic;
-import com.gitee.sunchenbin.mybatis.actable.annotation.Column;
-import com.gitee.sunchenbin.mybatis.actable.annotation.Index;
-import com.gitee.sunchenbin.mybatis.actable.constants.MySqlTypeConstant;
 import lombok.Data;
 
+import javax.persistence.*;
 import java.util.Date;
 
 @Data
+@MappedSuperclass
 public class BaseEntity implements Model {
 
-    @TableId(type = IdType.AUTO)
-    @Column(name="id", type = MySqlTypeConstant.BIGINT, comment = "主键", length = 10, isKey = true, isAutoIncrement = true)
+    @Id
+    @TableId
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @TableLogic
-    @Column(name = "deleted", type = MySqlTypeConstant.INT, length = 3, comment = "逻辑删除 ")
-    private Integer deleted;
-
-    @Column(name = "ctime", type = MySqlTypeConstant.TIMESTAMP, comment = "创建时间", isNull = false)
+    @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间'",insertable = false)
     private Date ctime;
 
-    @Column(name = "utime", type = MySqlTypeConstant.TIMESTAMP, comment = "修改时间", isNull = false)
+    @Column(columnDefinition = "TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间'",updatable = false)
     private Date utime;
+
+    @TableLogic
+    @Column(columnDefinition = "TINYINT DEFAULT 0 COMMENT '逻辑删除'")
+    private int deleted;
 }

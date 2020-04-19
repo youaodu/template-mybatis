@@ -5,7 +5,8 @@ public enum IdBizCode {
     USER_ID(12, "userId"),
     ORDER_ID(13, "orderId"),
     REFUND_ID(14, "refundId"),
-    ADMIN_ACCOUNT_ID(15, "adminAccountId")
+    ADMIN_ACCOUNT_ID(15, "adminAccountId"),
+    MER_ID(16, "merId")
     ;
 
     IdBizCode(Integer codeNum, String desc) {

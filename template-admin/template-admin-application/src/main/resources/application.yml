@@ -1,11 +1,3 @@
-# A.CTable
-mybatis:
-  table:
-    auto: update
-  model:
-    pack: com.youaodu.template.common.entity.model
-  database:
-    type: mysql
 spring:
   profiles:
     active: ${profile:dev}
@@ -15,5 +7,9 @@ mybatis-plus:
     db-config:
       logic-not-delete-value: 0
       logic-delete-value: 1
+      id-type: auto
   type-aliases-package: com.youaodu.template.common.entity.model
   type-aliases-super-type: com.youaodu.template.common.framework.crud.BaseEntity
+server:
+  servlet:
+    context-path: /api/admin
