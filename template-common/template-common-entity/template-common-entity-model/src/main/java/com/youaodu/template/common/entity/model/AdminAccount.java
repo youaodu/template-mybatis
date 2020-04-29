@@ -13,9 +13,6 @@ public class AdminAccount extends BaseUser {
     @Column(columnDefinition = "bit(1) DEFAULT b'0' COMMENT '该账号是否需要发验证码'")
     private Boolean needSms;
 
-    @Column(columnDefinition = "varchar(20) DEFAULT '' COMMENT '账号编号'")
-    private String accountId;
-
     @Column(columnDefinition = "int(3) DEFAULT 0 COMMENT '冻结 0 未 1 已'")
     private Integer loginLock;
 }

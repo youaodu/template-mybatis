@@ -1,6 +1,15 @@
 # template-mybatis 自用快速开发框架
 
-## 类结构图
+## 技术选型
+
+|技术|版本|描述|
+| - | - | - |
+| Springboot  | 2.1.8.RELEASE | 不用介绍吧            |
+| MybatisPlus | 3.3.1.tmp     | 非常常见的 Dao 层框架 |
+| hutool      | 5.2.4         | 非常好用的国产工具集  |
+| Jpa         | 2.1.8.RELEASE | 用来自动生成表的      |
+
+## 类结构说明
 ```
 ├── template-admin // 后台应用部分
 │   ├── template-admin-application // 后台应用启动模块

@@ -21,6 +21,9 @@ public class BaseUser extends BaseEntity {
     @Column(columnDefinition = "VARCHAR(30) COMMENT '明文密码'")
     private String pwd;
 
+    @Column(columnDefinition = "varchar(20) DEFAULT '' COMMENT '账号编号'")
+    private String accountId;
+
     // 加密后密码
     @Column(columnDefinition = "VARCHAR(32) COMMENT '密文密码'")
     private String encryPwd;
