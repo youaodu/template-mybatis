@@ -35,7 +35,7 @@ public class AccountBizImpl implements AccountBiz {
             throw new BusinessException("用户名或密码错误");
 
         if (account.getLoginLock() == 1)
-            throw new BusinessException("账号被锁");
+            throw new BusinessException("账号已冻结");
 
         // 结尾
         String tokenStr = BuilderToken.builderToken(new Token(account.getAccountId(), account.getUserName(), "", "admin"));

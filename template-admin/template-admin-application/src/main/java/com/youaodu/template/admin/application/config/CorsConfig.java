@@ -7,8 +7,8 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import javax.servlet.annotation.WebFilter;
 import java.util.List;
-
 
 @Configuration
 public class CorsConfig implements WebMvcConfigurer {

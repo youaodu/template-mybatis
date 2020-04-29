@@ -27,4 +27,7 @@ public class Resources extends BaseEntity {
 
     @Column(columnDefinition = "BIT DEFAULT b'1' COMMENT '是否显示'")
     private Boolean hide;
+
+    @Column(columnDefinition = "int(3) DEFAULT '0' COMMENT '资源级别'")
+    private Integer level;
 }

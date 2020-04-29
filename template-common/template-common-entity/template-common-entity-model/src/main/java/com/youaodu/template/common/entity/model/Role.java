@@ -18,4 +18,7 @@ public class Role extends BaseEntity {
 
     @Column(columnDefinition = "varchar(50) default '' comment '描述信息'")
     private String descr;
+
+    @Column(columnDefinition = "int(3) DEFAULT '0' COMMENT '可支配资源级别'")
+    private Integer level;
 }
