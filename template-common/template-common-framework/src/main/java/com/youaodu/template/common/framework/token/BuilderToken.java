@@ -6,8 +6,8 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.SecureUtil;
 import cn.hutool.crypto.symmetric.AES;
 import cn.hutool.json.JSONUtil;
-import com.youaotu.template.common.framework.exception.BusinessException;
-import com.youaotu.template.common.framework.exception.TokenException;
+import com.youaodu.template.common.framework.exception.BusinessException;
+import com.youaodu.template.common.framework.exception.TokenException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
