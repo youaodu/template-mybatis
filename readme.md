@@ -1,5 +1,6 @@
 # template-mybatis 自用快速开发框架
 
+## 类结构图
 ```
 ├── template-admin // 后台应用部分
 │   ├── template-admin-application // 后台应用启动模块
