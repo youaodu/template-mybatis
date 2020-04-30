@@ -1,4 +1,27 @@
-# template-mybatis 自用快速开发框架
+# template-mybatis 快速开发后台管理架构
+### 一直在寻找一个快速开发的框架，市面也有类似于jeecg/guns/x-boot这些。个人觉得有些局限，没法满足我的需求，所以我的快速开发框架诞生。该架构还有配套前端，我的爱人正在编辑中。介时会放上此文档。
+
+## 使用说明
+
+### 基础实体实现
+- 基础实体类 
+--	BaseEntity 里面含有一些基本字段
+```java
+	// 编号
+    private Long id;
+	
+	// 创建时间
+    private Date ctime;
+	
+	// 修改时间
+    private Date utime;
+	
+	// 逻辑删除
+    private int deleted;
+```
+所有实体类均需继承此实体类。
+
+### 用户模块设计
 
 ## 技术选型
 
@@ -27,3 +50,4 @@
 │   ├── template-common-framework // 基础框架
 │   ├── template-common-service // 公共业务封装
 ```
+

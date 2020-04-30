@@ -11,6 +11,8 @@ import com.youaodu.template.common.framework.exception.TokenException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.StringJoiner;
 
 /**
@@ -46,7 +48,6 @@ public class BuilderToken {
         }
         AES aes = SecureUtil.aes(privateKey);
         String tmp = aes.decryptStr(tokenStr);
-
         String[] params = tmp.split("_");
         return paramsToToken(params);
     }
