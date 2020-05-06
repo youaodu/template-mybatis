@@ -5,8 +5,7 @@ import lombok.Data;
 
 @Data
 public class CreditDto {
-    private String roleId;
+    private Long roleId;
 
-    private String resIds;
-
+    private Long[] resIds;
 }

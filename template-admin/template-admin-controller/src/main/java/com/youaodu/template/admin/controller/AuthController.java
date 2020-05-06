@@ -37,7 +37,7 @@ public class AuthController {
      */
     @GetMapping("/resAssign")
     public ResultMessage resAssign(Token token) {
-        return ResultMessage.ok();
+        return ResultMessage.ok(authBiz.resAssign(token));
     }
 
     /**
@@ -46,8 +46,8 @@ public class AuthController {
      * @return
      */
     @PostMapping("/credit")
-    public ResultMessage credit(CreditDto creditDto) {
-        return ResultMessage.ok();
+    public ResultMessage credit(@RequestBody CreditDto creditDto) {
+        return ResultMessage.ok(authBiz.credit(creditDto));
     }
 
     /**
