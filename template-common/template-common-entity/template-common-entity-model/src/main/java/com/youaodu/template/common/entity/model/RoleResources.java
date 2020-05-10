@@ -15,7 +15,7 @@ import javax.persistence.Table;
 public class RoleResources extends BaseEntity {
 
     @Column(columnDefinition = "BIGINT(10) COMMENT '角色编号'")
-    public Long roleId;
+    private Long roleId;
 
     @Column(columnDefinition = "BIGINT(10) COMMENT '资源编号'")
     private Long resourcesId;

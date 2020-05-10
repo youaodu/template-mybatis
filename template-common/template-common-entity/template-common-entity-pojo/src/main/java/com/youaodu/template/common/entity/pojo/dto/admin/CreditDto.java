@@ -8,4 +8,6 @@ public class CreditDto {
     private Long roleId;
 
     private Long[] resIds;
+
+    private String[] buttons;
 }

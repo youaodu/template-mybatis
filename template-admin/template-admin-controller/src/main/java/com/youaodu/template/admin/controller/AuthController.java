@@ -7,7 +7,6 @@ import com.youaodu.template.common.framework.http.ResultMessage;
 import com.youaodu.template.common.framework.token.Token;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.AutoConfigureOrder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -48,14 +47,5 @@ public class AuthController {
     @PostMapping("/credit")
     public ResultMessage credit(@RequestBody CreditDto creditDto) {
         return ResultMessage.ok(authBiz.credit(creditDto));
-    }
-
-    /**
-     * 设置页面按钮
-     * @return
-     */
-    @PostMapping("/settingsButton")
-    public ResultMessage settingsButton(@Valid @RequestBody SettingsButtonDto settingsButtonDto) {
-        return ResultMessage.ok();
     }
 }

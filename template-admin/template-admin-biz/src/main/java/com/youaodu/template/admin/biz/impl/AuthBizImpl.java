@@ -2,9 +2,12 @@ package com.youaodu.template.admin.biz.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.map.MapUtil;
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.sun.org.apache.xpath.internal.operations.String;
 import com.youaodu.template.admin.biz.AuthBiz;
 import com.youaodu.template.common.entity.model.AccountRole;
 import com.youaodu.template.common.entity.model.Resources;
@@ -13,6 +16,7 @@ import com.youaodu.template.common.entity.model.RoleResources;
 import com.youaodu.template.common.entity.pojo.dto.admin.CreditDto;
 import com.youaodu.template.common.entity.pojo.vo.admin.ResAssignVo;
 import com.youaodu.template.common.entity.pojo.vo.admin.TreeVo;
+import com.youaodu.template.common.framework.exception.BusinessException;
 import com.youaodu.template.common.framework.token.Token;
 import com.youaodu.template.common.framework.utils.ConvertUtils;
 import com.youaodu.template.common.service.AccountRoleService;
@@ -23,8 +27,10 @@ import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.processing.RoundEnvironment;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.StringJoiner;
 import java.util.stream.Collectors;
 
 @Service
@@ -109,8 +115,25 @@ public class AuthBizImpl implements AuthBiz {
      */
     @Override
     public Integer credit(CreditDto creditDto) {
+        // 基础判断
+        if (creditDto.getButtons().length != creditDto.getResIds().length) {
+            throw new BusinessException("");
+        }
 
-        return null;
+        roleResourcesService.remove(new LambdaQueryWrapper<RoleResources>()
+                .eq(RoleResources::getRoleId, creditDto.getRoleId())
+        );
+
+        List<RoleResources> inserts = new ArrayList<>();
+        for (int i = 0; i < creditDto.getResIds().length; i++) {
+            RoleResources insertTmp = new RoleResources();
+            insertTmp.setRoleId(creditDto.getRoleId());
+            insertTmp.setResourcesId(creditDto.getResIds()[i]);
+            insertTmp.setButtons(creditDto.getButtons()[i]);
+            inserts.add(insertTmp);
+        }
+        roleResourcesService.saveBatch(inserts);
+        return 0;
     }
 
     private List<TreeVo> genTree(List<JSONObject> resList, Long pid) {
