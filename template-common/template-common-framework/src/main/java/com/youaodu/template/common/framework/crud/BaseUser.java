@@ -28,8 +28,12 @@ public class BaseUser extends BaseEntity {
     @Column(columnDefinition = "VARCHAR(32) COMMENT '密文密码'")
     private String encryPwd;
 
+    @Column(columnDefinition = "int(3) DEFAULT 0 COMMENT '冻结 0 未 1 已'")
+    private Integer loginLock;
+
     public void setPwd(String pwd) {
         this.pwd = pwd;
         this.encryPwd = SecureUtil.md5(pwd).toUpperCase();
     }
+
 }

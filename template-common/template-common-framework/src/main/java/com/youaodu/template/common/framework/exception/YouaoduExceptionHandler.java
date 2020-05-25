@@ -1,7 +1,11 @@
 package com.youaodu.template.common.framework.exception;
 
+import cn.hutool.core.map.MapUtil;
+import cn.hutool.json.JSONObject;
+import cn.hutool.json.JSONUtil;
 import com.youaodu.template.common.framework.http.ResultCode;
 import com.youaodu.template.common.framework.http.ResultMessage;
+import com.youaodu.template.common.framework.utils.RequestUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -12,6 +16,7 @@ import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -30,7 +35,9 @@ public class YouaoduExceptionHandler {
      * @params
      */
     @ExceptionHandler(value = BusinessException.class)
-    public ResultMessage businessException(BusinessException e) {
+    public ResultMessage businessException(BusinessException e, HttpServletRequest request) {
+        // 打印入参
+        logParams(request);
         logger.error("拦截业务异常 >>> {}", e);
         return ResultMessage.error(e.getMessage());
     }
@@ -78,9 +85,15 @@ public class YouaoduExceptionHandler {
         return ResultMessage.error(ResultCode.NO_PERMISS);
     }
 
-
+    /**
+     * 未知异常
+     * @param e
+     * @return
+     */
     @ExceptionHandler(value = Exception.class)
-    public ResultMessage Exception(Exception e) {
+    public ResultMessage Exception(Exception e, HttpServletRequest request) {
+        // 打印参数
+        logParams(request);
         logger.error("出现未知异常 >>> {}", e);
         return ResultMessage.error(ResultCode.ERROE);
     }
@@ -103,5 +116,14 @@ public class YouaoduExceptionHandler {
     @ExceptionHandler(value = HttpRequestMethodNotSupportedException.class)
     public ResultMessage httpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException e) {
         return ResultMessage.error(ResultCode.REQUEST_ERROR);
+    }
+
+    private void logParams(HttpServletRequest request) {
+        // 打印入参
+        if (MapUtil.isEmpty(request.getParameterMap())) {
+            logger.error("方法入参 >>> {}", RequestUtils.getRaw(request).toString());
+        } else {
+            logger.error("方法入参 >>> {}", JSONUtil.toJsonStr(request.getParameterMap()));
+        }
     }
 }

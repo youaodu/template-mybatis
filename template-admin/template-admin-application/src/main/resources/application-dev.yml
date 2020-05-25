@@ -1,28 +1,30 @@
-  server:
-    port: 8081
-  spring:
-    # 数据源
-    datasource:
-      url: jdbc:mysql://127.0.0.1:3306/yoaotu_template?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&useSSL=true
-      username: root
-      password: Dya110699++
-      driver-class-name: com.mysql.cj.jdbc.Driver
-    # Redis
-    redis:
-      host: 127.0.0.1
-      port: 6379
-      database: 0
-      timeout: 3000
-    # JPA 自动创建表
-    jpa:
-      database-platform6: org.hibernate.dialect.MySQL5Dialect
-      show-sql: true
+server:
+  port: 8081
+spring:
+  profiles:
+    include: wechat-dev
+  # 数据源
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/yoaotu_template?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&useSSL=true
+    username: root
+    password: Dya110699++
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  # Redis
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    database: 0
+    timeout: 3000
+  # JPA 自动创建表
+  jpa:
+    database-platform6: org.hibernate.dialect.MySQL5Dialect
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+    properties:
       hibernate:
-        ddl-auto: update
-      properties:
-        hibernate:
-          hbm2ddl:
-            auto: update
-  logging:
-    level:
-      com.youaodu.template.common.dao.mapper: debug
+        hbm2ddl:
+          auto: update
+logging:
+  level:
+    com.youaodu.template.common.dao.mapper: debug

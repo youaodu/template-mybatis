@@ -1,6 +1,7 @@
 package com.youaodu.template.common.framework.utils;
 
 import cn.hutool.json.JSONObject;
+import cn.hutool.json.JSONUtil;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.BufferedReader;
@@ -12,7 +13,7 @@ public class RequestUtils {
      * @param request
      * @return
      */
-    public static JSONObject getRequestParamsObj(HttpServletRequest request) {
+    public static JSONObject getRaw(HttpServletRequest request) {
         JSONObject paramsObj = null;
         try {
             BufferedReader streamReader = new BufferedReader( new InputStreamReader(request.getInputStream(), "UTF-8"));
@@ -21,9 +22,7 @@ public class RequestUtils {
             while ((inputStr = streamReader.readLine()) != null)
                 responseStrBuilder.append(inputStr);
 
-            System.out.println(responseStrBuilder.toString());
-//            paramsObj = JSONUtil.parseObj(responseStrBuilder.toString());
-
+            paramsObj = JSONUtil.parseObj(responseStrBuilder.toString());
         } catch (Exception e) {
             e.printStackTrace();
         }

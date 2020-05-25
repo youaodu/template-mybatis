@@ -1,6 +1,7 @@
 package com.youaodu.template.admin.biz.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONObject;
@@ -29,6 +30,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.processing.RoundEnvironment;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.StringJoiner;
 import java.util.stream.Collectors;
@@ -56,6 +58,10 @@ public class AuthBizImpl implements AuthBiz {
         List<AccountRole> roles = accountRoleService.list(new LambdaQueryWrapper<AccountRole>()
                 .eq(AccountRole::getAccountId, token.getAccountId())
         );
+
+        if (CollUtil.isEmpty(roles)) {
+            return new ArrayList<>();
+        }
 
         // 所有授权
         List<RoleResources> roleResources = roleResourcesService.list(new LambdaQueryWrapper<RoleResources>()
@@ -91,6 +97,10 @@ public class AuthBizImpl implements AuthBiz {
         List<Long> roleIds = accountRoleService.list(new LambdaQueryWrapper<AccountRole>()
                 .eq(AccountRole::getAccountId, token.getAccountId())
         ).stream().map(AccountRole::getRoleId).collect(Collectors.toList());
+
+        if (CollUtil.isEmpty(roleIds)) {
+            return new ArrayList<>();
+        }
 
         List<Integer> levels = roleService.listByIds(roleIds).stream().map(Role::getLevel).collect(Collectors.toList());
         // 拼接条件语句
