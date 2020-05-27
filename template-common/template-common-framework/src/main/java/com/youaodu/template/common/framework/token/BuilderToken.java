@@ -58,7 +58,7 @@ public class BuilderToken {
      * @param token
      * * @time 05:37
      */
-    public static String builderToken(Token token) {
+    public static <T extends Token> String builderToken(T token) {
         // 转换
         StringJoiner params = new StringJoiner("_");
         params.add(StrUtil.toString(token.getAccountId()));
