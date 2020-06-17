@@ -22,6 +22,23 @@
 所有实体类均需继承此实体类。
 
 ### 用户模块设计
+```java
+    // 登录名
+    private String userName;
+    
+    // 明文密码
+    private String pwd;
+    
+    // 全局唯一ID
+    private String accountId;
+
+    // 加密后密码
+    private String encryPwd;
+    
+    // 登录锁定
+    private Integer loginLock;
+```
+用户的字段是妙不可言的，有很多维度的信息，本系统只记录用户名和密码，如需可继承此类(BaseUser)
 
 ## 技术选型
 

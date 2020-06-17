@@ -5,7 +5,6 @@ import org.apache.commons.codec.digest.DigestUtils;
 import java.util.Iterator;
 import java.util.Map;
 
-//import org.springframework.data.redis.core.script.DigestUtils;
 
 /**
  *  生活圈 加签工具类
