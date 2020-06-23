@@ -1,5 +1,6 @@
 package com.youaodu.template.common.entity.pojo.dto.main;
 
+import com.youaodu.template.common.framework.token.Token;
 import lombok.Data;
 
 import java.util.Map;
@@ -13,4 +14,7 @@ public class RootDto {
 
     private Map<String, Object> params;
 
+    private String appCode;
+
+    private Token tokenBean;
 }

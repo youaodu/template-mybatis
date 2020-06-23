@@ -48,8 +48,6 @@
             <version>3.4</version>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/org.apache.commons/org.apache.commons.codec -->
-        <!-- https://mvnrepository.com/artifact/org.apache.directory.studio/org.apache.commons.codec -->
         <dependency>
             <groupId>org.apache.directory.studio</groupId>
             <artifactId>org.apache.commons.codec</artifactId>

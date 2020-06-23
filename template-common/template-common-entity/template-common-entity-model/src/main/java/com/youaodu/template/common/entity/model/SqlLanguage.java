@@ -21,4 +21,7 @@ public class SqlLanguage extends BaseEntity {
 
     @Column(columnDefinition = "varchar(500) default '' comment '返回参数集'")
     private String resultParams;
+
+    @Column(columnDefinition = "varchar(50) default '' comment 'App标记'")
+    private String appCode;
 }

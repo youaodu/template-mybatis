@@ -23,6 +23,8 @@ spring:
       hibernate:
         hbm2ddl:
           auto: update
+# 日志控制
 logging:
   level:
+    # mapper 打印集合
     com.youaodu.template.common.dao.mapper: debug

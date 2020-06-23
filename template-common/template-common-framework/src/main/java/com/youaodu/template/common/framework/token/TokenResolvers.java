@@ -41,13 +41,12 @@ public class TokenResolvers extends HandlerMethodArgumentResolverComposite imple
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
         String tokenString = webRequest.getHeader(TOKEN_NAME);
         if (StrUtil.isBlank(tokenString)) {
-            throw new TokenException("token不存在");
+            return null;
         }
         if (!BuilderToken.validateToken(tokenString)) {
-            logger.info(tokenString);
-            throw new BusinessException("token错误");
+            logger.warn(tokenString);
+            return null;
         }
-        Token token = BuilderToken.analysisToken(tokenString);
-        return token;
+        return BuilderToken.analysisToken(tokenString);
     }
 }
