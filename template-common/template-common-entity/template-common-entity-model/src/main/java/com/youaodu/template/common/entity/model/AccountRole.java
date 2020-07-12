@@ -18,4 +18,5 @@ public class AccountRole extends BaseEntity {
 
     @Column(columnDefinition = "bigint(10) default 0 COMMENT '角色编号'")
     private Long roleId;
+
 }

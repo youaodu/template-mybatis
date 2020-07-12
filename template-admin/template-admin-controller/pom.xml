@@ -24,7 +24,7 @@
 
         <dependency>
             <groupId>com.youaodu</groupId>
-            <artifactId>template-common-main</artifactId>
+            <artifactId>template-wechat</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>

@@ -2,15 +2,15 @@ spring:
   profiles:
     active: ${profile:dev}
 mybatis-plus:
-  mapper-locations: classpath*:mapper/*.xml,classpath*:com/gitee/sunchenbin/mybatis/actable/mapping/*/*.xml
+  mapper-locations: classpath*:mapper/*.xml
   global-config:
     db-config:
       logic-not-delete-value: 0
       logic-delete-value: 1
       id-type: auto
-  type-aliases-package: com.youaodu.template.common.entity.model
+  type-aliases-package: com.youaodu.template.common.entity.model, com.youaodu.template.common.framework.config.entity
   type-aliases-super-type: com.youaodu.template.common.framework.crud.BaseEntity
 server:
   servlet:
     context-path: /api/admin
-  port: 8080
+  port: 8081

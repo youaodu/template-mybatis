@@ -2,23 +2,29 @@ package com.youaodu.template.wechat.utils;
 
 
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.lang.UUID;
+import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.crypto.SecureUtil;
 import cn.hutool.http.HttpUtil;
 import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
+import com.youaodu.template.common.framework.utils.ParamUtils;
 import com.youaodu.template.common.framework.utils.RedisUtils;
 import com.youaodu.template.common.framework.utils.SpringUtils;
 import com.youaodu.template.wechat.bo.MenuBo;
+import com.youaodu.template.wechat.bo.ScriptAuthBo;
+import com.youaodu.template.wechat.bo.ScriptAuthBoVo;
 import com.youaodu.template.wechat.config.WeChatConfig;
 import com.youaodu.template.wechat.config.WeChatUrls;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.boot.model.naming.ImplicitUniqueKeyNameSource;
+import org.omg.PortableServer.ID_UNIQUENESS_POLICY_ID;
+import org.springframework.boot.autoconfigure.cache.CacheProperties;
+import sun.security.provider.SHA;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -28,13 +34,17 @@ public class WeChatUtil {
 
     private static WeChatConfig weChatConfig = SpringUtils.getBean(WeChatConfig.class);
 
-    public static final String accesskeyName = "weChat_accessToken";
+    private static final String accesskeyName = "weChat_accessToken";
 
+    private static final String jsapiticketName = "weChat_jsapiTicket";
 
-    public static String accessToken() {
+    private static String accessToken() {
         return redisUtils.getStr(accesskeyName);
     }
 
+    private static String jsapiTicket() {
+        return redisUtils.getStr(jsapiticketName);
+    }
     /**
      * 刷新AccessToken
      */
@@ -46,11 +56,24 @@ public class WeChatUtil {
 
         // 发送请求
         JSONObject response = JSONUtil.parseObj(HttpUtil.get(WeChatUrls.accessToken, requestParams));
+        log.debug("accessToken返回:{}",response.toString());
         String accessToken = response.getStr("access_token");
         if (StrUtil.isNotBlank(accessToken)) {
             // token存储redis
             redisUtils.set(accesskeyName, accessToken, 3600L);
+            log.info("accessToken loading success");
+            loadJsapiTicket();
         }
+    }
+
+    public static void loadJsapiTicket() {
+        Map<String, Object> params = new HashMap<>();
+        params.put("access_token", accessToken());
+        params.put("type", "jsapi");
+        JSONObject response = JSONUtil.parseObj(HttpUtil.get(WeChatUrls.jsapiTicket, params));
+        String ticket = response.getStr("ticket");
+        redisUtils.set(jsapiticketName, ticket, 3600L);
+        log.info("jsapiticket loading success");
     }
 
     /**
@@ -84,6 +107,36 @@ public class WeChatUtil {
             return menuToBo(buttonsObj);
         else
             return null;
+    }
+
+    /**
+     * 前端JS鉴权
+     * @param scriptAuthBo
+     * @return
+     */
+    public static ScriptAuthBoVo scriptAuth(ScriptAuthBo scriptAuthBo) {
+        // 拼接获取签名桉树
+        TreeMap<String, Object> tmpParams = new TreeMap<>();
+        String randomStr = IdUtil.fastUUID();
+        tmpParams.put("noncestr", randomStr);
+        tmpParams.put("jsapi_ticket", jsapiTicket());
+        long time = System.currentTimeMillis() / 1000;
+        tmpParams.put("timestamp", time);
+        tmpParams.put("url", scriptAuthBo.getCurrUrl());
+
+        String sign = genSign(tmpParams);
+        // 拼装结果集
+        ScriptAuthBoVo result = new ScriptAuthBoVo();
+        result.setAppId(weChatConfig.getAppId());
+        result.setNonceStr(randomStr);
+        result.setTimestamp(time);
+        result.setSignature(sign);
+        return result;
+    }
+
+    private static String genSign(TreeMap<String, Object> treeMap) {
+        String signStr = ParamUtils.toRequestParams(treeMap);
+        return SecureUtil.sha1(signStr);
     }
 
     private static List<Map<String, Object>> boToMenu(List<MenuBo> menus) {

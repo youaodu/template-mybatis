@@ -26,3 +26,8 @@ spring:
 logging:
   level:
     com.youaodu.template.common.dao.mapper: debug
+    com.youaodu.template.common.framework.config.mapper: debug
+
+
+yoaotu:
+  controller: com.youaodu.template.admin.controller

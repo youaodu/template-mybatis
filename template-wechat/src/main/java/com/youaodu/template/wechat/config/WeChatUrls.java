@@ -8,6 +8,11 @@ public class WeChatUrls {
     public static final String accessToken = "https://api.weixin.qq.com/cgi-bin/token";
 
     /**
+     * jsapi_ticket
+     */
+    public static final String jsapiTicket = "https://api.weixin.qq.com/cgi-bin/ticket/getticket";
+
+    /**
      * 设定公众号按钮
      */
     public static final String settingButtons = "https://api.weixin.qq.com/cgi-bin/menu/create";

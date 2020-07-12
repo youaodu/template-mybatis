@@ -18,7 +18,18 @@ public enum RequestMethod {
         this.method = method;
     }
 
+    /**
+     * 根据请求方法获取枚举
+     * @param method
+     * @return
+     */
     public RequestMethod query(String method){
+        if (StrUtil.isBlank(method)) {
+            return null;
+        }
+        // 转大写
+        method = method.toUpperCase();
+        // 遍历查找
         for (RequestMethod item : RequestMethod.values()) {
             if (StrUtil.equals(item.getMethod(), method)) {
                 return item;

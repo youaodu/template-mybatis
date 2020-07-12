@@ -16,7 +16,6 @@
         <module>template-common-entity</module>
         <module>template-common-service</module>
         <module>template-common-framework</module>
-        <module>template-common-main</module>
     </modules>
 
 

@@ -3,6 +3,7 @@ package com.youaodu.template.admin.controller;
 import com.youaodu.template.admin.biz.AuthBiz;
 import com.youaodu.template.common.entity.pojo.dto.admin.CreditDto;
 import com.youaodu.template.common.entity.pojo.dto.admin.SettingsButtonDto;
+import com.youaodu.template.common.framework.annotation.ApiLog;
 import com.youaodu.template.common.framework.http.ResultMessage;
 import com.youaodu.template.common.framework.token.Token;
 import lombok.AllArgsConstructor;
@@ -44,6 +45,7 @@ public class AuthController {
      * @param creditDto
      * @return
      */
+    @ApiLog(desc = "授权接口")
     @PostMapping("/credit")
     public ResultMessage credit(@RequestBody CreditDto creditDto) {
         return ResultMessage.ok(authBiz.credit(creditDto));

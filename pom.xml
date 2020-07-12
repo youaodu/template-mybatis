@@ -95,12 +95,6 @@
 
             <dependency>
                 <groupId>com.youaodu</groupId>
-                <artifactId>template-common-main</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>com.youaodu</groupId>
                 <artifactId>template-wechat</artifactId>
                 <version>${project.version}</version>
             </dependency>

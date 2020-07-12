@@ -147,19 +147,23 @@ public class AuthBizImpl implements AuthBiz {
     }
 
     private List<TreeVo> genTree(List<JSONObject> resList, Long pid) {
-        return resList.stream().map(it -> {
-            TreeVo resultItem = new TreeVo();
 
+        ArrayList<TreeVo> result = new ArrayList<>();
+
+        resList.forEach(it -> {
             if (it.getLong("pid") == pid) {
                 // 赋值
+                TreeVo resultItem = new TreeVo();
                 resultItem.setButtons(it.getStr("buttons"));
                 resultItem.setComponent(it.getStr("component"));
                 resultItem.setHide(it.getBool("hide"));
                 resultItem.setName(it.getStr("name"));
                 resultItem.setPath(it.getStr("path"));
                 resultItem.setChildren(genTree(resList, it.getLong("id")));
+                result.add(resultItem);
             }
-            return resultItem;
-        }).collect(Collectors.toList());
+        });
+
+        return result;
     }
 }

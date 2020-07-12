@@ -103,10 +103,10 @@ public class YouaoduExceptionHandler {
      * @param e
      * @return
      */
-    @ExceptionHandler(value = HttpMessageNotReadableException.class)
-    public ResultMessage httpMessageNotReadableException(HttpMessageNotReadableException e) {
-        return ResultMessage.error(ResultCode.NO_PARAM);
-    }
+//    @ExceptionHandler(value = HttpMessageNotReadableException.class)
+//    public ResultMessage httpMessageNotReadableException(HttpMessageNotReadableException e) {
+//        return ResultMessage.error(ResultCode.NO_PARAM);
+//    }
 
     /**
      * 请求方式错误
@@ -120,9 +120,8 @@ public class YouaoduExceptionHandler {
 
     private void logParams(HttpServletRequest request) {
         // 打印入参
-        if (MapUtil.isEmpty(request.getParameterMap())) {
-            logger.error("方法入参 >>> {}", RequestUtils.getRaw(request).toString());
-        } else {
+        if (!MapUtil.isEmpty(request.getParameterMap())) {
+//            logger.error("方法入参 >>> {}", RequestUtils.getRaw(request).toString());
             logger.error("方法入参 >>> {}", JSONUtil.toJsonStr(request.getParameterMap()));
         }
     }
