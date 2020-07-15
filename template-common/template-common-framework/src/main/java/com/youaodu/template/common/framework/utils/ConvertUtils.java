@@ -2,6 +2,7 @@ package com.youaodu.template.common.framework.utils;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.json.JSONUtil;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -39,16 +40,7 @@ public class ConvertUtils {
             return new ArrayList<>();
         }
 
-        List<T> collect = beans.stream().map(it -> {
-            try {
-                T t = tClass.newInstance();
-                BeanUtil.copyProperties(it, t);
-                return t;
-            } catch (Exception e) {
-                return null;
-            }
-        }).collect(Collectors.toList());
-
-        return collect;
+        String tmpStr = JSONUtil.toJsonStr(beans);
+        return JSONUtil.parseArray(tmpStr).toList(tClass);
     }
 }

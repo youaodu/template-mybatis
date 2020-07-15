@@ -7,6 +7,7 @@ import cn.hutool.core.lang.UUID;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.SecureUtil;
+import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpUtil;
 import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONObject;
@@ -63,6 +64,8 @@ public class WeChatUtil {
             redisUtils.set(accesskeyName, accessToken, 3600L);
             log.info("accessToken loading success");
             loadJsapiTicket();
+        } else {
+            log.error("accessToken loading error: {}", response.toString());
         }
     }
 
@@ -83,7 +86,12 @@ public class WeChatUtil {
     public static boolean settingButtons(List<MenuBo> menuBos) {
         Map<String, Object> requestParams = new HashMap<>();
         requestParams.put("button", boToMenu(menuBos));
-        JSONObject response = JSONUtil.parseObj(HttpUtil.post(WeChatUrls.settingButtons, JSONUtil.toJsonStr(requestParams)));
+
+        // 发起请求
+        HttpRequest post = HttpUtil.createPost(WeChatUrls.settingButtons + "?access_token=" + accessToken());
+        post.body(JSONUtil.toJsonStr(requestParams));
+        JSONObject response = JSONUtil.parseObj(post.execute().body());
+
         if (StrUtil.equals(response.getStr("errcode"), "0") && StrUtil.equals(response.getStr("errmsg"), "ok")) {
             return true;
         } else {
@@ -134,8 +142,11 @@ public class WeChatUtil {
         return result;
     }
 
+
+
+
     private static String genSign(TreeMap<String, Object> treeMap) {
-        String signStr = ParamUtils.toRequestParams(treeMap);
+        String signStr = HttpUtil.toParams(treeMap);
         return SecureUtil.sha1(signStr);
     }
 

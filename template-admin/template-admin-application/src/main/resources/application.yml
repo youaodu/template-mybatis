@@ -1,6 +1,10 @@
 spring:
   profiles:
     active: ${profile:dev}
+#  mvc:
+#    static-path-pattern: /**
+#  resources:
+#    static-locations: classpath:/META-INF/resources/,classpath:/resources/,classpath:/static/,classpath:/public/,file:${filePath}
 mybatis-plus:
   mapper-locations: classpath*:mapper/*.xml
   global-config:

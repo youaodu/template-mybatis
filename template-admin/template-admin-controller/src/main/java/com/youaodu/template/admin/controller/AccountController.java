@@ -25,6 +25,7 @@ public class AccountController {
      */
     @WhiteRequest
     @PostMapping("/login")
+    @ApiLog(desc = "登陆接口")
     public ResultMessage login(@Valid @RequestBody LoginDto loginDto) {
         return ResultMessage.ok(accountBiz.login(loginDto));
     }
@@ -34,11 +35,10 @@ public class AccountController {
      * @param addAccountDto
      * @return
      */
-    @ApiLog(desc = "添加用户接口")
     @PostMapping
+    @ApiLog(desc = "添加用户接口")
     public ResultMessage addAccount(@Valid @RequestBody AddAccountDto addAccountDto) {
         return ResultMessage.ok(accountBiz.addAccount(addAccountDto));
     }
 
-    
 }

@@ -4,5 +4,6 @@ import lombok.Data;
 
 @Data
 public class JsAuthDto {
-    private String currUrl;
+
+    private String currUrl; // 当前页面Url
 }
