@@ -1,6 +1,9 @@
 server:
   port: 8082
+
 spring:
+  profiles:
+    include: wechat-dev
   # 数据源
   datasource:
     url: jdbc:mysql://127.0.0.1:3306/yoaotu_template?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&useSSL=true

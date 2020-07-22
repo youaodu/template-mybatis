@@ -1,6 +1,7 @@
 package com.youaodu.template.common.framework.crud;
 
 
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableLogic;
 import lombok.Data;
@@ -13,7 +14,7 @@ import java.util.Date;
 public class BaseEntity implements Model {
 
     @Id
-    @TableId
+    @TableId(type = IdType.AUTO)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 

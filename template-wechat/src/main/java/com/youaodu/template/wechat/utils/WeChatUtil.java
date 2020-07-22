@@ -2,8 +2,6 @@ package com.youaodu.template.wechat.utils;
 
 
 import cn.hutool.core.collection.CollUtil;
-import cn.hutool.core.date.DateUtil;
-import cn.hutool.core.lang.UUID;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.SecureUtil;
@@ -12,19 +10,16 @@ import cn.hutool.http.HttpUtil;
 import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
-import com.youaodu.template.common.framework.utils.ParamUtils;
+import com.youaodu.template.common.framework.exception.BusinessException;
 import com.youaodu.template.common.framework.utils.RedisUtils;
 import com.youaodu.template.common.framework.utils.SpringUtils;
-import com.youaodu.template.wechat.bo.MenuBo;
-import com.youaodu.template.wechat.bo.ScriptAuthBo;
-import com.youaodu.template.wechat.bo.ScriptAuthBoVo;
+import com.youaodu.template.wechat.bo.*;
 import com.youaodu.template.wechat.config.WeChatConfig;
 import com.youaodu.template.wechat.config.WeChatUrls;
 import lombok.extern.slf4j.Slf4j;
-import org.omg.PortableServer.ID_UNIQUENESS_POLICY_ID;
-import org.springframework.boot.autoconfigure.cache.CacheProperties;
-import sun.security.provider.SHA;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -142,11 +137,87 @@ public class WeChatUtil {
         return result;
     }
 
+    /**
+     * 根据code获取用户信息
+     * @param code
+     * @return
+     */
+    public static QueryOpenIdByCodeBoVo queryOpenIdByCode(String code) {
+        // 拼接参数
+        LinkedHashMap<String, Object> params = new LinkedHashMap<>();
+        params.put("appid", weChatConfig.getAppId());
+        params.put("secret", weChatConfig.getAppSecret());
+        params.put("code", code);
+        params.put("grant_type", "authorization_code");
+
+        // 发起请求
+        log.info("获取openID 请求入参 {}", JSONUtil.toJsonStr(params));
+        JSONObject response = JSONUtil.parseObj(HttpUtil.get(WeChatUrls.openId, params));
+        log.info("获取openID 请求出参 {}", response.toString());
+
+        if (StrUtil.isNotBlank(response.getStr("access_token"))) {
+            // 拼接返回
+            QueryOpenIdByCodeBoVo result = new QueryOpenIdByCodeBoVo();
+            result.setAccessToken(response.getStr("access_token"));
+            result.setOpenId(response.getStr("openid"));
+            return result;
+        }
+        throw new BusinessException("获取openId失败");
+    }
+
+    /**
+     * 根据openId获取用户信息
+     * @param openId 公众号唯一ID
+     * @param accessToken 授权token
+     * @return
+     */
+    public static QueryUserInfoByOpenIdBoVo queryUserInfoByOpenId(String openId, String accessToken) {
+        // 请求参数
+        LinkedHashMap<String, Object> params = new LinkedHashMap<>();
+        params.put("access_token", accessToken);
+        params.put("openid", openId);
+        params.put("lang", "zh_CN");
+
+        // 发起请求
+        log.info("根据openId获取用户信息 请求入参 {}", JSONUtil.toJsonStr(params));
+        JSONObject response = JSONUtil.parseObj(HttpUtil.get(WeChatUrls.userInfo, params));
+        log.info("根据openId获取用户信息 请求出参 {}", response.toString());
+
+        return response.toBean(QueryUserInfoByOpenIdBoVo.class);
+    }
+
+    /**
+     * 查询用户列表
+     * @param nextId
+     * @return
+     */
+    public static QueryUserListBoVo queryUserList(String nextId) {
+        // 请求参数
+        LinkedHashMap<String, Object> params = new LinkedHashMap<>();
+        params.put("access_token", accessToken());
+        params.put("next_openid", nextId);
+
+        // 发起请求
+        log.info("查询用户列表 请求入参 {}", JSONUtil.toJsonStr(params));
+        JSONObject response = JSONUtil.parseObj(HttpUtil.get(WeChatUrls.userList, params));
+        log.info("根据openId获取用户信息 请求出参 {}", response.toString());
+
+        QueryUserListBoVo result = new QueryUserListBoVo();
+        result.setCurrTotal(response.getInt("count"));
+        result.setOpenIds(response.getJSONObject("data").getJSONArray("openid").toList(String.class));
+        result.setTotal(response.getInt("total"));
+        return result;
+    }
 
 
 
     private static String genSign(TreeMap<String, Object> treeMap) {
         String signStr = HttpUtil.toParams(treeMap);
+        try {
+            signStr = URLDecoder.decode(signStr, "utf-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
         return SecureUtil.sha1(signStr);
     }
 

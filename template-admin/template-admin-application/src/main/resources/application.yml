@@ -15,6 +15,4 @@ mybatis-plus:
   type-aliases-package: com.youaodu.template.common.entity.model, com.youaodu.template.common.framework.config.entity
   type-aliases-super-type: com.youaodu.template.common.framework.crud.BaseEntity
 server:
-  servlet:
-    context-path: /api/admin
   port: 8081

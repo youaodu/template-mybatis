@@ -1,5 +1,12 @@
 package com.youaodu.template.wechat.config;
 
+import cn.hutool.crypto.SecureUtil;
+import cn.hutool.http.HttpUtil;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.util.TreeMap;
+
 public class WeChatUrls {
 
     /**
@@ -21,4 +28,19 @@ public class WeChatUrls {
      * 获取按钮集
      */
     public static final String showButtons = "https://api.weixin.qq.com/cgi-bin/get_current_selfmenu_info";
+
+    /**
+     * 获取openId
+     */
+    public static final String openId = "https://api.weixin.qq.com/sns/oauth2/access_token";
+
+    /**
+     * 获取用户信息
+     */
+    public static final String userInfo = "https://api.weixin.qq.com/cgi-bin/user/info";
+
+    /**
+     * 获取用户列表
+     */
+    public static final String userList = "https://api.weixin.qq.com/cgi-bin/user/get";
 }
