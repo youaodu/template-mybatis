@@ -1,6 +1,5 @@
 package com.youaodu.template.admin.biz.impl.wxHandler;
 
-import cn.hutool.extra.spring.SpringUtil;
 import com.youaodu.template.common.framework.utils.SpringUtils;
 
 import java.util.HashMap;
@@ -12,7 +11,7 @@ public class WxHandlerFactory {
     /**
      * 工厂对象
      */
-    private  Map<String, WxHandlerIfac> factory = new HashMap<>();
+    private Map<String, WxHandlerIfac> factory = new HashMap<>();
 
     /**
      * 工厂初始化
@@ -23,6 +22,15 @@ public class WxHandlerFactory {
         beans.forEach(it -> {
             factory.put(it.getKey(), it);
         });
+    }
+
+    /**
+     * 获取
+     * @param key
+     * @return
+     */
+    public WxHandlerIfac get(String key) {
+        return factory.get(key);
     }
 
     /**

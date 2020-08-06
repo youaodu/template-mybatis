@@ -252,6 +252,13 @@ public class WeChatUtil {
         return result;
     }
 
+    /**
+     * 发送信息
+     */
+    public static void sendMsg() {
+
+    }
+
 
 
     private static String genSign(TreeMap<String, Object> treeMap) {

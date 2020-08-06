@@ -15,6 +15,6 @@ public class TextHandler implements WxHandlerIfac {
 
     @Override
     public void exec(WeChatNoticeDto weChatNoticeDto) {
-
+        // {"Content":"is","CreateTime":"1596701838","ToUserName":"gh_dba765fee3fd","FromUserName":"oyMF31UalMhW_KZA094xkWlOJFYQ","MsgType":"text","MsgId":"22859273767163858"}
     }
 }

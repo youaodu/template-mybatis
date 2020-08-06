@@ -15,6 +15,6 @@ public class SubscribeHandler implements WxHandlerIfac {
 
     @Override
     public void exec(WeChatNoticeDto weChatNoticeDto) {
-
+        // {"CreateTime":"1596703068","EventKey":"","Event":"unsubscribe","ToUserName":"gh_dba765fee3fd","FromUserName":"oyMF31UalMhW_KZA094xkWlOJFYQ","MsgType":"event"}
     }
 }
