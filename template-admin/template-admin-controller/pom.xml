@@ -22,11 +22,7 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>com.youaodu</groupId>
-            <artifactId>template-wechat</artifactId>
-            <version>${project.version}</version>
-        </dependency>
+
     </dependencies>
 
 </project>

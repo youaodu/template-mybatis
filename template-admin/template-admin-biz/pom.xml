@@ -16,5 +16,10 @@
             <groupId>com.youaodu</groupId>
             <artifactId>template-common-service</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>com.youaodu</groupId>
+            <artifactId>template-wechat</artifactId>
+        </dependency>
     </dependencies>
 </project>

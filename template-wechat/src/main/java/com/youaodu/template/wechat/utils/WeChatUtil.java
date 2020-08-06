@@ -2,6 +2,9 @@ package com.youaodu.template.wechat.utils;
 
 
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.io.FileUtil;
+import cn.hutool.core.io.resource.InputStreamResource;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.SecureUtil;
@@ -11,6 +14,7 @@ import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import com.youaodu.template.common.framework.exception.BusinessException;
+import com.youaodu.template.common.framework.utils.FileUtils;
 import com.youaodu.template.common.framework.utils.RedisUtils;
 import com.youaodu.template.common.framework.utils.SpringUtils;
 import com.youaodu.template.wechat.bo.*;
@@ -209,6 +213,45 @@ public class WeChatUtil {
         return result;
     }
 
+    /**
+     * 上传临时文件
+     * @param uploadTmpMaterialBo
+     * @return
+     */
+    public static UploadTmpMaterialBoVo uploadTmpMaterial(UploadTmpMaterialBo uploadTmpMaterialBo) {
+        // 前置条件判断
+        if (uploadTmpMaterialBo.getInputStream() == null && StrUtil.isBlank(uploadTmpMaterialBo.getFileHttpUrl()) && StrUtil.isBlank(uploadTmpMaterialBo.getFileLocalUrl())) {
+            throw new BusinessException("上传临时文件地址不能为空");
+        }
+        if (uploadTmpMaterialBo.getType() == null) {
+            throw new BusinessException("上传临时文件类型不能为空");
+        }
+
+        // 转换输入流
+        if (uploadTmpMaterialBo.getInputStream() == null) {
+            if (StrUtil.isNotBlank(uploadTmpMaterialBo.getFileLocalUrl())) {
+                uploadTmpMaterialBo.setInputStream(FileUtil.getInputStream(uploadTmpMaterialBo.getFileLocalUrl()));
+            } else {
+                uploadTmpMaterialBo.setInputStream(FileUtils.urlToInputStream(uploadTmpMaterialBo.getFileHttpUrl()));
+            }
+        }
+
+        // 拼接参数
+        Map<String, Object> params = new HashMap<>();
+        params.put("access_token", accessToken());
+        params.put("type", uploadTmpMaterialBo.getType().getCode());
+        params.put("media", new InputStreamResource(uploadTmpMaterialBo.getInputStream(), uploadTmpMaterialBo.getFileName()));
+        log.info("上传临时文件入参 >> {}", JSONUtil.toJsonStr(params));
+        JSONObject response = JSONUtil.parseObj(HttpUtil.post(WeChatUrls.fileTmpUplod, params));
+        log.info("上传临时文件出参 >> {}", response.toString());
+
+        UploadTmpMaterialBoVo result = new UploadTmpMaterialBoVo();
+        // {"type":"image","media_id":"bRONn92aGrX5G7RqA-Cpc4JmRh4fOFnEsNt9iAtEaaNeeZK7qya416AiNX-AcPeK","created_at":1596684020,"item":[]}
+        result.setMediaId(response.getStr("media_id"));
+        result.setCreateTime(DateUtil.date(response.getLong("created_at") * 1000).toString("yyyy-MM-dd HH:mm:ss"));
+        return result;
+    }
+
 
 
     private static String genSign(TreeMap<String, Object> treeMap) {
@@ -274,4 +317,6 @@ public class WeChatUtil {
             return resultItem;
         }).collect(Collectors.toList());
     }
+
+
 }

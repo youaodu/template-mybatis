@@ -1,6 +1,10 @@
 spring:
   profiles:
     active: ${profile:dev}
+  servlet:
+    multipart:
+      max-file-size: 26541661
+      max-request-size: 26541661
 #  mvc:
 #    static-path-pattern: /**
 #  resources:

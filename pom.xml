@@ -105,6 +105,7 @@
                 <groupId>cn.hutool</groupId>
                 <artifactId>hutool-all</artifactId>
                 <version>5.2.4</version>
+
             </dependency>
 
             <dependency>

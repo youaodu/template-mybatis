@@ -43,4 +43,9 @@ public class WeChatUrls {
      * 获取用户列表
      */
     public static final String userList = "https://api.weixin.qq.com/cgi-bin/user/get";
+
+    /**
+     * 临时文件上传
+     */
+    public static final String fileTmpUplod = "https://api.weixin.qq.com/cgi-bin/media/upload";
 }

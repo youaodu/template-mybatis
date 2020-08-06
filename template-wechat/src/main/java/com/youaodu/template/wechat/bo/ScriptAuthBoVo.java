@@ -1,6 +1,5 @@
 package com.youaodu.template.wechat.bo;
 
-import com.sun.xml.internal.fastinfoset.algorithm.BooleanEncodingAlgorithm;
 import lombok.Data;
 
 @Data
