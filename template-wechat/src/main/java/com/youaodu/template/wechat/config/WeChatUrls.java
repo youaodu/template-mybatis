@@ -47,5 +47,10 @@ public class WeChatUrls {
     /**
      * 临时文件上传
      */
-    public static final String fileTmpUplod = "https://api.weixin.qq.com/cgi-bin/media/upload";
+    public static final String fileTmpUpload = "https://api.weixin.qq.com/cgi-bin/media/upload";
+
+    /**
+     * 给用户发信息
+     */
+    public static final String sendMsgToUser = "https://api.weixin.qq.com/cgi-bin/message/custom/send";
 }

@@ -1,7 +1,9 @@
 package com.youaodu.template.admin.controller;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.XmlUtil;
+import cn.hutool.json.JSONUtil;
 import com.youaodu.template.admin.biz.WeChatBiz;
 import com.youaodu.template.admin.biz.impl.wxHandler.WxHandlerFactory;
 import com.youaodu.template.admin.biz.impl.wxHandler.WxHandlerIfac;
@@ -14,10 +16,7 @@ import com.youaodu.template.common.framework.http.ResultMessage;
 import com.youaodu.template.common.framework.utils.ConvertUtils;
 import com.youaodu.template.common.framework.utils.RequestUtils;
 import com.youaodu.template.common.framework.utils.SpringUtils;
-import com.youaodu.template.wechat.bo.MenuBo;
-import com.youaodu.template.wechat.bo.ScriptAuthBo;
-import com.youaodu.template.wechat.bo.UploadTmpMaterialBo;
-import com.youaodu.template.wechat.bo.UploadTmpMaterialBoVo;
+import com.youaodu.template.wechat.bo.*;
 import com.youaodu.template.wechat.eum.WxTypeEnum;
 import com.youaodu.template.wechat.utils.WeChatUtil;
 import org.apache.commons.lang3.StringUtils;
@@ -104,6 +103,11 @@ public class WeChatController {
         return "SUCCESS";
     }
 
+    /**
+     * 上传临时素材文件
+     * @param file
+     * @return
+     */
     @PostMapping("/uploadTmpFile")
     public ResultMessage uploadTmpFile(MultipartFile file) {
         UploadTmpMaterialBo uploadTmpMaterialBo = new UploadTmpMaterialBo();
@@ -115,7 +119,12 @@ public class WeChatController {
             e.printStackTrace();
         }
         UploadTmpMaterialBoVo uploadTmpMaterialBoVo = WeChatUtil.uploadTmpMaterial(uploadTmpMaterialBo);
-        return ResultMessage.ok();
+        return ResultMessage.ok(JSONUtil.createObj().put("mediaId", uploadTmpMaterialBoVo.getMediaId()));
     }
 
+    @GetMapping("/sendMsgToUser")
+    public ResultMessage sendMsgToUser(SendMsgBo sendMsgBo) {
+        WeChatUtil.sendMsg(sendMsgBo);
+        return ResultMessage.ok();
+    }
 }

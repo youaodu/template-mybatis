@@ -20,7 +20,9 @@ import com.youaodu.template.common.framework.utils.SpringUtils;
 import com.youaodu.template.wechat.bo.*;
 import com.youaodu.template.wechat.config.WeChatConfig;
 import com.youaodu.template.wechat.config.WeChatUrls;
+import com.youaodu.template.wechat.eum.WxTypeEnum;
 import lombok.extern.slf4j.Slf4j;
+import sun.lwawt.macosx.CPrinterDevice;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
@@ -224,7 +226,7 @@ public class WeChatUtil {
             throw new BusinessException("上传临时文件地址不能为空");
         }
         if (uploadTmpMaterialBo.getType() == null) {
-            throw new BusinessException("上传临时文件类型不能为空");
+            throw new BusinessException("不能接受当前类型文件");
         }
 
         // 转换输入流
@@ -242,7 +244,7 @@ public class WeChatUtil {
         params.put("type", uploadTmpMaterialBo.getType().getCode());
         params.put("media", new InputStreamResource(uploadTmpMaterialBo.getInputStream(), uploadTmpMaterialBo.getFileName()));
         log.info("上传临时文件入参 >> {}", JSONUtil.toJsonStr(params));
-        JSONObject response = JSONUtil.parseObj(HttpUtil.post(WeChatUrls.fileTmpUplod, params));
+        JSONObject response = JSONUtil.parseObj(HttpUtil.post(WeChatUrls.fileTmpUpload, params));
         log.info("上传临时文件出参 >> {}", response.toString());
 
         UploadTmpMaterialBoVo result = new UploadTmpMaterialBoVo();
@@ -255,11 +257,43 @@ public class WeChatUtil {
     /**
      * 发送信息
      */
-    public static void sendMsg() {
+    public static void sendMsg(SendMsgBo sendMsgBo) {
+        // 封装入参
+        Map<String, Object> params = new HashMap<>();
+        params.put("touser", sendMsgBo.getToUserOpenId());
+        params.put("msgtype", sendMsgBo.getMsgType());
+
+        if (WxTypeEnum.TEXT.equals(sendMsgBo.getMsgType())) {
+            // 文本
+            params.put("text", JSONUtil.createObj().put("content", sendMsgBo.getContent()));
+        } else if (WxTypeEnum.IMAGE.equals(sendMsgBo.getMsgType())) {
+            // 图片
+            params.put("image", JSONUtil.createObj().put("media_id", sendMsgBo.getMediaId()));
+        } else if (WxTypeEnum.VIDEO.equals(sendMsgBo.getMsgType())) {
+            // 视频
+        } else if (WxTypeEnum.VOICE.equals(sendMsgBo.getMsgType())) {
+            // 语音
+            params.put("voice", JSONUtil.createObj().put("media_id", sendMsgBo.getMediaId()));
+        } else if (WxTypeEnum.NEWS.equals(sendMsgBo.getMsgType())) {
+            // 分享卡片
+            JSONArray tmpArr = JSONUtil.createArray().put(
+                    JSONUtil.createObj()
+                            .put("title", sendMsgBo.getTitle())
+                            .put("description", sendMsgBo.getDescription())
+                            .put("url", sendMsgBo.getUrl())
+                            .put("picurl", sendMsgBo.getPicurl())
+            );
+            params.put("news", JSONUtil.createObj().put("articles", tmpArr));
+        } else {
+            throw new BusinessException("其他文件类型暂不支持");
+        }
+
+        // 发起请求
+        log.info("发送信息给客户入参 >> {}", JSONUtil.toJsonStr(params));
+        JSONObject response = JSONUtil.parseObj(HttpUtil.post(WeChatUrls.sendMsgToUser + "?access_token=" + accessToken(), JSONUtil.toJsonStr(params)));
+        log.info("发送信息给客户出参 >> {}", response.toString());
 
     }
-
-
 
     private static String genSign(TreeMap<String, Object> treeMap) {
         String signStr = HttpUtil.toParams(treeMap);

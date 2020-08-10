@@ -11,7 +11,8 @@ public enum WxTypeEnum {
     THUMB("缩略图", "thumb"),
     UNSUBSCRIBE("取消关注", "unsubscribe"),
     SUBSCRIBE("关注", "unsubscribe"),
-    TEXT("文本", "text")
+    TEXT("文本", "text"),
+    NEWS("分享卡片", "news")
     ;
 
     WxTypeEnum(String type, String code) {
@@ -31,4 +32,11 @@ public enum WxTypeEnum {
     private String type;
 
     private String code;
+
+    public boolean equals(String code) {
+        if (StrUtil.equalsIgnoreCase(this.code, code)) {
+            return true;
+        }
+        return false;
+    }
 }

@@ -19,4 +19,4 @@ mybatis-plus:
   type-aliases-package: com.youaodu.template.common.entity.model, com.youaodu.template.common.framework.config.entity
   type-aliases-super-type: com.youaodu.template.common.framework.crud.BaseEntity
 server:
-  port: 8081
+  port: 8890
