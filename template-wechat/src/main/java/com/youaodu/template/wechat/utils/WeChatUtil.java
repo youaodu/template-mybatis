@@ -255,6 +255,49 @@ public class WeChatUtil {
     }
 
     /**
+     *
+     * @param uploadForeverMaterialBo
+     * @return
+     */
+    public static UploadForeverMaterialBoVo uploadForeverMaterial(UploadForeverMaterialBo uploadForeverMaterialBo) {
+        // 前置条件判断
+        if (uploadForeverMaterialBo.getInputStream() == null && StrUtil.isBlank(uploadForeverMaterialBo.getFileHttpUrl()) && StrUtil.isBlank(uploadForeverMaterialBo.getFileLocalUrl())) {
+            throw new BusinessException("上传临时文件地址不能为空");
+        }
+        if (uploadForeverMaterialBo.getType() == null) {
+            throw new BusinessException("不能接受当前类型文件");
+        }
+
+        // 转换输入流
+        if (uploadForeverMaterialBo.getInputStream() == null) {
+            if (StrUtil.isNotBlank(uploadForeverMaterialBo.getFileLocalUrl())) {
+                uploadForeverMaterialBo.setInputStream(FileUtil.getInputStream(uploadForeverMaterialBo.getFileLocalUrl()));
+            } else {
+                uploadForeverMaterialBo.setInputStream(FileUtils.urlToInputStream(uploadForeverMaterialBo.getFileHttpUrl()));
+            }
+        }
+
+        // 拼装请求参数
+        Map<String, Object> params = new HashMap<>();
+        params.put("type", uploadForeverMaterialBo.getType().getCode());
+        params.put("access_token", accessToken());
+        params.put("media", new InputStreamResource(uploadForeverMaterialBo.getInputStream(), uploadForeverMaterialBo.getFileName()));
+        log.info("上传永久文件入参 >> {}", JSONUtil.toJsonStr(params));
+        JSONObject response = JSONUtil.parseObj(HttpUtil.post(WeChatUrls.fileTmpUpload, params));
+        log.info("上传永久文件出参 >> {}", response.toString());
+
+        if (StrUtil.isNotBlank(response.getStr("url"))) {
+            log.error("上传永久文件出错 {}", response.toString());
+            return null;
+        }
+
+        UploadForeverMaterialBoVo result = new UploadForeverMaterialBoVo();
+        result.setMediaId(response.getStr("media_id"));
+        result.setUrl(response.getStr("url"));
+        return result;
+    }
+
+    /**
      * 发送信息
      */
     public static void sendMsg(SendMsgBo sendMsgBo) {
@@ -292,6 +335,10 @@ public class WeChatUtil {
         log.info("发送信息给客户入参 >> {}", JSONUtil.toJsonStr(params));
         JSONObject response = JSONUtil.parseObj(HttpUtil.post(WeChatUrls.sendMsgToUser + "?access_token=" + accessToken(), JSONUtil.toJsonStr(params)));
         log.info("发送信息给客户出参 >> {}", response.toString());
+
+        if (response.getInt("errcode") != 0) {
+            log.error("发送信息给客户失败 {}", response.toString());
+        }
 
     }
 
