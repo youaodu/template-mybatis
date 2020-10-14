@@ -28,6 +28,8 @@ public class AdminTemplateApplication {
     private static void init() {
         // 加载accessToekn
         WeChatUtil.reloadAccessToken();
+        // 加载jsapiTicket
+        WeChatUtil.loadJsapiTicket();
     }
 
 }

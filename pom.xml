@@ -104,14 +104,7 @@
             <dependency>
                 <groupId>cn.hutool</groupId>
                 <artifactId>hutool-all</artifactId>
-                <version>5.2.4</version>
-
-            </dependency>
-
-            <dependency>
-                <groupId>com.gitee.sunchenbin.mybatis.actable</groupId>
-                <artifactId>mybatis-enhance-actable</artifactId>
-                <version>1.0.8.1.RELEASE</version>
+                <version>5.4.1</version>
             </dependency>
 
             <dependency>

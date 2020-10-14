@@ -64,7 +64,6 @@ public class WeChatUtil {
             // token存储redis
             redisUtils.set(accesskeyName, accessToken, 3600L);
             log.info("accessToken loading success");
-            loadJsapiTicket();
         } else {
             log.error("accessToken loading error: {}", response.toString());
         }
