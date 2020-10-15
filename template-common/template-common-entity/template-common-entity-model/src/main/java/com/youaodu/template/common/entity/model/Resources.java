@@ -30,4 +30,7 @@ public class Resources extends BaseEntity {
 
     @Column(columnDefinition = "int(3) DEFAULT '0' COMMENT '资源级别'")
     private Integer level;
+
+    @Column(columnDefinition = "int(3) default '0' comment '排序'")
+    private Integer sort;
 }

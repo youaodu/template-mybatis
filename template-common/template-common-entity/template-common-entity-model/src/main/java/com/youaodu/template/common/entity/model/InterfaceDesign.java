@@ -26,13 +26,13 @@ public class InterfaceDesign extends BaseEntity {
     @Column(columnDefinition = "varchar(200) default '' comment 'sql标记'")
     private String sqlFlag;
 
-    @Column(columnDefinition = "bit(1) default b'0' comment '是否开启事务'")
-    private Boolean openAcid;
+    @Column(columnDefinition = "int(3) default b'0' comment '是否开启事务'")
+    private Integer openAcid;
 
     @Column(columnDefinition = "varchar(30) default '' comment '应用标记'")
     private String appCode;
 
-    @Column(columnDefinition = "bit(1) DEFAULT b'0' COMMENT '该接口是否需要token请求'")
-    private Boolean isToken;
+    @Column(columnDefinition = "int(3) DEFAULT b'0' COMMENT '该接口是否需要token请求'")
+    private Integer isToken;
 
 }
