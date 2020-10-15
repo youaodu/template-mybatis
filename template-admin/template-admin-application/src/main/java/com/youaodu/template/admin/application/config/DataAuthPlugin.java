@@ -27,6 +27,7 @@ public class DataAuthPlugin implements Interceptor {
         BoundSql boundSql = statementHandler.getBoundSql();
         String sql = boundSql.getSql();
 
+
         // TODO 数据权限订正加上个人标记
 
         return invocation.proceed();

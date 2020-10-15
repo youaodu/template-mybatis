@@ -1,10 +1,12 @@
 package com.youaodu.template.wechat.utils;
 
 
+import cn.hutool.Hutool;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.io.resource.InputStreamResource;
+import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.SecureUtil;
@@ -254,7 +256,7 @@ public class WeChatUtil {
     }
 
     /**
-     *
+     * 上传永久媒体文件
      * @param uploadForeverMaterialBo
      * @return
      */
@@ -320,12 +322,12 @@ public class WeChatUtil {
             // 分享卡片
             JSONArray tmpArr = JSONUtil.createArray().put(
                     JSONUtil.createObj()
-                            .put("title", sendMsgBo.getTitle())
-                            .put("description", sendMsgBo.getDescription())
-                            .put("url", sendMsgBo.getUrl())
-                            .put("picurl", sendMsgBo.getPicurl())
+                            .putOpt("title", sendMsgBo.getTitle())
+                            .putOpt("description", sendMsgBo.getDescription())
+                            .putOpt("url", sendMsgBo.getUrl())
+                            .putOpt("picurl", sendMsgBo.getPicurl())
             );
-            params.put("news", JSONUtil.createObj().put("articles", tmpArr));
+            params.put("news", JSONUtil.createObj().putOpt("articles", tmpArr));
         } else {
             throw new BusinessException("其他文件类型暂不支持");
         }
@@ -337,6 +339,48 @@ public class WeChatUtil {
 
         if (response.getInt("errcode") != 0) {
             log.error("发送信息给客户失败 {}", response.toString());
+        }
+
+    }
+
+    /**
+     * 发送模板消息
+     * @param sendTemplateMsgBo
+     */
+    public static void sendTemplateMsg(SendTemplateMsgBo sendTemplateMsgBo) {
+        // 封装入参
+        JSONObject params = JSONUtil.createObj();
+        params.putOpt("touser", sendTemplateMsgBo.getOpenId());
+        params.putOpt("template_id", sendTemplateMsgBo.getTemplateId());
+        params.putOpt("url", sendTemplateMsgBo.getUrl());
+
+        // 小程序参数
+        if (StrUtil.isNotBlank(sendTemplateMsgBo.getMiniAppId()) && StrUtil.isNotBlank(sendTemplateMsgBo.getMiniPagePath())) {
+            params.putOpt("miniprogram", JSONUtil.createObj()
+                    .putOpt("appid", sendTemplateMsgBo.getMiniAppId())
+                    .putOpt("pagepath", sendTemplateMsgBo.getMiniPagePath())
+            );
+        }
+        // data参数
+        if (MapUtil.isNotEmpty(sendTemplateMsgBo.getParams())) {
+            JSONObject tmp = JSONUtil.createObj();
+            // 参数转换{key: {value: '', color: ''}}
+            sendTemplateMsgBo.getParams().entrySet().forEach(it -> {
+                tmp.putOpt(it.getKey(),
+                        JSONUtil.createObj()
+                                .putOpt("value", it.getValue())
+                                .putOpt("color", "#173177")
+                );
+            });
+            params.putOpt("data", tmp);
+        }
+
+        log.info("发送模板信息入参 >> {}", params.toString());
+        JSONObject response = JSONUtil.parseObj(HttpUtil.post(WeChatUrls.sendTemplateMsg + "?access_token=" + accessToken(), params.toString()));
+        log.info("发送模板信息出参 >> {}", response.toString());
+
+        if (response.getInt("errcode") != 0) {
+            log.error("发送模板信息失败 {}", response.toString());
         }
 
     }

@@ -58,4 +58,9 @@ public class WeChatUrls {
      * 给用户发信息
      */
     public static final String sendMsgToUser = "https://api.weixin.qq.com/cgi-bin/message/custom/send";
+
+    /**
+     * 发送模板消息
+     */
+    public static final String sendTemplateMsg = "https://api.weixin.qq.com/cgi-bin/message/template/send";
 }
