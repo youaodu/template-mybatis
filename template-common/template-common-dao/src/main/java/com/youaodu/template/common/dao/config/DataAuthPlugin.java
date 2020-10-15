@@ -1,4 +1,4 @@
-package com.youaodu.template.admin.application.config;
+package com.youaodu.template.common.dao.config;
 
 import org.apache.ibatis.executor.statement.StatementHandler;
 import org.apache.ibatis.mapping.BoundSql;
@@ -17,7 +17,6 @@ import java.util.Properties;
 public class DataAuthPlugin implements Interceptor {
 
     /**
-     *
      * @param invocation
      * @return
      */
