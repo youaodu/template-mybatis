@@ -47,7 +47,12 @@ public class BuilderToken {
             return null;
         }
         AES aes = SecureUtil.aes(privateKey);
-        String tmp = aes.decryptStr(tokenStr);
+        String tmp;
+        try {
+            tmp = aes.decryptStr(tokenStr);
+        } catch (Exception e) {
+            return null;
+        }
         String[] params = tmp.split("_");
         return paramsToToken(params);
     }
@@ -85,8 +90,12 @@ public class BuilderToken {
             throw new TokenException("token不存在");
         }
         AES aes = SecureUtil.aes(privateKey);
-        String pwd = aes.decryptStr(token);
-
+        String pwd;
+        try {
+             pwd = aes.decryptStr(token);
+        } catch (Exception e) {
+            return false;
+        }
         // 解密后token以_分割
         String[] params = pwd.split("_");
         if (ArrayUtil.isEmpty(params)) {

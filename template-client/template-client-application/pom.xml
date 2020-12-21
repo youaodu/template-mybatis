@@ -12,8 +12,6 @@
     <artifactId>template-client-application</artifactId>
 
     <dependencies>
-
-
         <dependency>
             <groupId>com.youaodu</groupId>
             <artifactId>template-client-controller</artifactId>
